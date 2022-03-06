@@ -40,10 +40,10 @@ userSchema.virtual('password')
         this._password = password;
         this.salt = uuidv1();
         this.hashed_password = this.encryptPassword(password);
+    })
+    .get(function() {
+        return this._password;
     });
-.get(function() {
-    return this._password;
-});
 
 userSchema.methods = {
     encryptPassword: function(password) {
