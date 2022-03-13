@@ -1,7 +1,7 @@
 const express = require('express'); //importing express
 const router = express.Router(); //importing router
 
-const { signup, signin, signout, requireSignin } = require('../Controllers/user'); //importing signup controller
+const { signup, signin, signout, requireSignin } = require('../Controllers/auth'); //importing auth controller
 const { userSignupValidator } = require('../validator'); //importing signup validator
 
 // router.get('/', (req, res) => {
