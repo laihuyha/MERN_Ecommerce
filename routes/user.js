@@ -10,5 +10,6 @@ const { userSignupValidator } = require('../validator'); //importing signup vali
 
 router.post("/signup", userSignupValidator, signup);
 router.post("/signin", signin);
+router.get("/signout", signout);
 
 module.exports = router;
