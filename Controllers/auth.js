@@ -54,3 +54,24 @@ exports.requireSignin = expressJwt({
     algorithms: ["HS256"], // added later
     userProperty: "auth",
 });
+
+//This function is used to check if the user is authenticated and authorized to access the route with the specified Account ID
+// for exmple: An User can only access his/her own account not other user's account
+exports.isAuth = (req, res, next) => {
+    let user = req.profile && req.auth && req.profile._id == req.auth._id;
+    if (!user) {
+        return res.status(403).json({
+            error: "Access denied"
+        });
+    }
+    next();
+}
+
+exports.isAdmin = (req, res, next) => {
+    if (req.profile.roles === 0) {
+        return res.status(403).json({
+            error: "Admin resource! Access denied"
+        });
+    }
+    next();
+}
