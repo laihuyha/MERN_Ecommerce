@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-const express = require('express');
-const router = express.Router();
-
-const { signup } = require('../Controllers/user');
-
-// router.get('/', (req, res) => {
-//     res.send('Hello World! from node router')
-// });
-
-router.post("/signup", signup);
-=======
 const express = require('express'); //importing express
 const router = express.Router(); //importing router
 
@@ -22,6 +10,3 @@ router.get('/secret/:userId', requireSignin, isAuth, isAdmin, (req, res) => {
     });
 });
 router.param('userId', userById);
->>>>>>> Ha
-
-module.exports = router;
