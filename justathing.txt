@@ -1,0 +1,1 @@
+MONGO_URI = mongodb+srv://mern0222:Abc123123@merncluster.6qqgd.mongodb.net/MERNCluster?retryWrites=true&w=majority
