@@ -31,13 +31,19 @@ mongoose.connect(process.env.DATABASE, {
 //middlewares
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(cookieParser()); <<
+<< << < HEAD
 app.use(expressValidator());
 
 //routes middleware
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
-app.use("/api", categoryRoutes);
+app.use("/api", categoryRoutes); ===
+=== =
+
+//routes middleware
+app.use("/api", userRoutes); >>>
+>>> > origin / main
 
 const port = process.env.PORT || 8000;
 
