@@ -2,6 +2,7 @@ const Category = require('../models/category');
 const Product = require('../models/product');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 
+//#region function for category
 exports.categoryById = (req, res, next, id) => {
     Category.findById(id).exec((err, category) => {
         if (err || !category) {
@@ -78,3 +79,4 @@ exports.list = (req, res) => {
         res.json(data);
     });
 };
+//#endregion
