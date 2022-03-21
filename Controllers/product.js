@@ -136,9 +136,7 @@ exports.list = (req, res) => {
     Product.find()
         .select('-photo')
         .populate('category')
-        .sort([
-            [sortBy, order]
-        ])
+        .sort([[sortBy, order]])
         .limit(limit)
         .exec((err, products) => {
             if (err) {
@@ -218,9 +216,7 @@ exports.listBySearch = (req, res) => {
     Product.find(findArgs)
         .select('-photo')
         .populate('category')
-        .sort([
-            [sortBy, order]
-        ])
+        .sort([[sortBy, order]])
         .skip(skip)
         .limit(limit)
         .exec((err, data) => {

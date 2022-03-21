@@ -1,20 +1,16 @@
-const express = require('express'); //importing express
-const router = express.Router(); //importing router
+const express = require("express");
+const router = express.Router();
 
-const { signup, signin, signout, requireSignin } = require('../Controllers/auth'); //importing auth controller
-const { userSignupValidator } = require('../validator'); //importing signup validator
-
-// router.get('/', (req, res) => {
-//     res.send('Hello World! from node router')
-// });
+const {
+    signup,
+    signin,
+    signout,
+    requireSignin
+} = require("../controllers/auth");
+const { userSignupValidator } = require("../validator");
 
 router.post("/signup", userSignupValidator, signup);
 router.post("/signin", signin);
 router.get("/signout", signout);
-
-//requireSignin example
-// router.get('/Hello', requireSignin, (req, res) => {
-//     res.send('Hello World! from node router');
-// });
 
 module.exports = router;
