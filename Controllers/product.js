@@ -4,6 +4,7 @@ const fs = require('fs');
 const Product = require('../models/product');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 
+//#region CRUD Functions
 exports.productById = (req, res, next, id) => {
     Product.findById(id)
         .populate('category')
@@ -120,23 +121,27 @@ exports.update = (req, res) => {
         });
     });
 };
+//#endregion
+
 
 /**
  * sell / arrival
- * by sell = /products?sortBy=sold&order=desc&limit=4
- * by arrival = /products?sortBy=createdAt&order=desc&limit=4
+ * by sell = /products?sortBy=sold&order=desc&limit=4 //mean sort by sold products and show 4 products
+ * by arrival = /products?sortBy=createdAt&order=desc&limit=4 //like by sell but by arrival
  * if no params are sent, then all products are returned
  */
 
 exports.list = (req, res) => {
     let order = req.query.order ? req.query.order : 'asc';
     let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
-    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+    let limit = req.query.limit ? parseInt(req.query.limit) : 9;
 
     Product.find()
-        .select('-photo')
-        .populate('category')
-        .sort([[sortBy, order]])
+        .select('-photo') // exclude photo from the response
+        .populate('category') // populate category field in the response with the category object from the category collection (category is the name of the field in the product collection)
+        .sort([
+            [sortBy, order]
+        ]) // sort by sortBy and order
         .limit(limit)
         .exec((err, products) => {
             if (err) {
@@ -216,7 +221,9 @@ exports.listBySearch = (req, res) => {
     Product.find(findArgs)
         .select('-photo')
         .populate('category')
-        .sort([[sortBy, order]])
+        .sort([
+            [sortBy, order]
+        ])
         .skip(skip)
         .limit(limit)
         .exec((err, data) => {
