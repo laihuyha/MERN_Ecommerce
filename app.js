@@ -1,11 +1,11 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const expressValidator = require('express-validator');
-require('dotenv').config();
+const express = require('express'); //for setting up the express server
+const mongoose = require('mongoose'); //for setting up the mongoose database
+const morgan = require('morgan'); //for logging the requests
+const bodyParser = require('body-parser'); //for parsing the body of the request
+const cookieParser = require('cookie-parser'); //for parsing the cookies
+const cors = require('cors'); //for allowing cross origin requests from different domains (e.g. frontend and backend)
+const expressValidator = require('express-validator'); //for validating the request body
+require('dotenv').config(); //for setting up the environment variables
 
 // import routes
 const authRoutes = require('./routes/auth');
