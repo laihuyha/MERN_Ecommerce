@@ -195,11 +195,19 @@ exports.listCategories = (req, res) => {
  */
 
 exports.listBySearch = (req, res) => {
-    let order = req.body.order ? req.body.order : 'desc';
-    let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
-    let limit = req.body.limit ? parseInt(req.body.limit) : 100;
-    let skip = parseInt(req.body.skip);
+    //#region this for form request body
+    // let order = req.body.order ? req.body.order : 'desc';
+    // let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
+    // let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+    //#endregion
+
+    //#region this is for PostMan request body test PASSED
+    let order = req.query.order ? req.query.order : 'desc';
+    let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
+    let limit = req.query.limit ? parseInt(req.query.limit) : 100;
+    let skip = parseInt(req.body.skip); // this is for pagination (skip is for pagination)
     let findArgs = {};
+    //#endregion
 
     // console.log(order, sortBy, limit, skip, req.body.filters);
     // console.log("findArgs", findArgs);
@@ -234,10 +242,11 @@ exports.listBySearch = (req, res) => {
                 });
             }
             res.json({
-                size: data.length,
+                size: data.length, //mean how many products are in the response
                 data
             });
         });
+    console.log(order, sortBy, limit, skip, req.body.filters);
 };
 
 exports.photo = (req, res, next) => {
