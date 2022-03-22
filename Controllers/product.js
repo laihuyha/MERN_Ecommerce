@@ -174,6 +174,7 @@ exports.listRelated = (req, res) => {
         });
 };
 
+//this mean u list the categories of the products which are in the product collection (example we have 4 categories for product but in product list just use 2 of them, this method will show u there 2 categories which are used)
 exports.listCategories = (req, res) => {
     Product.distinct('category', {}, (err, categories) => {
         if (err) {
