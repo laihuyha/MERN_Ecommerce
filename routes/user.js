@@ -7,7 +7,12 @@ const { userById, read, update, purchaseHistory } = require('../controllers/user
 
 router.get('/secret', requireSignin, (req, res) => {
     res.json({
-        user: 'got here yay'
+        message: 'got here yay'
+    });
+});
+router.get('/secret/:userId', requireSignin, isAuth, isAdmin, (req, res) => {
+    res.json({
+        user: req.profile
     });
 });
 

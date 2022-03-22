@@ -15,8 +15,8 @@ exports.userById = (req, res, next, id) => {
 };
 
 exports.read = (req, res) => {
-    req.profile.hashed_password = undefined;
-    req.profile.salt = undefined;
+    req.profile.hashed_password = undefined; // this mean hide the password when we send the user object
+    req.profile.salt = undefined; // like above
     return res.json(req.profile);
 };
 
@@ -37,7 +37,7 @@ exports.read = (req, res) => {
 
 exports.update = (req, res) => {
     // console.log('UPDATE USER - req.user', req.user, 'UPDATE DATA', req.body);
-    const { name, password } = req.body;
+    const { name, password, email } = req.body;
 
     User.findOne({ _id: req.profile._id }, (err, user) => {
         if (err || !user) {
@@ -62,7 +62,14 @@ exports.update = (req, res) => {
                 user.password = password;
             }
         }
-
+        if (email) {
+            if (!validateEmail(email)) {
+                return res.status(400).json({
+                    error: 'Invalid email'
+                });
+            }
+            user.email = email;
+        }
         user.save((err, updatedUser) => {
             if (err) {
                 console.log('USER UPDATE ERROR', err);
@@ -115,3 +122,8 @@ exports.purchaseHistory = (req, res) => {
             res.json(orders);
         });
 };
+
+const validateEmail = email => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
