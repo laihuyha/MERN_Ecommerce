@@ -159,11 +159,11 @@ exports.list = (req, res) => {
  */
 
 exports.listRelated = (req, res) => {
-    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+    let limit = req.query.limit ? parseInt(req.query.limit) : 2;
 
-    Product.find({ _id: { $ne: req.product }, category: req.product.category })
+    Product.find({ _id: { $ne: req.product }, category: req.product.category }) // not include the request product in the response
         .limit(limit)
-        .populate('category', '_id name')
+        .populate('category', '_id name') // populate category field in the response with the category object from the category collection (category is the name of the field in the product collection)
         .exec((err, products) => {
             if (err) {
                 return res.status(400).json({
