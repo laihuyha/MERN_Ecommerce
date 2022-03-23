@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require("express"); // import express for routing
 const router = express.Router();
 
 const {
@@ -12,5 +12,6 @@ const { userSignupValidator } = require("../validator");
 router.post("/signup", userSignupValidator, signup);
 router.post("/signin", signin);
 router.get("/signout", signout);
+router.post("/signouts", signout); //api -> router -> controller variable -> controller function
 
 module.exports = router;
