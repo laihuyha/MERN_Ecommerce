@@ -1,6 +1,6 @@
 const formidable = require('formidable');
 const _ = require('lodash');
-const fs = require('fs');
+const fs = require('fs'); //for upload file
 const Product = require('../models/product');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 
