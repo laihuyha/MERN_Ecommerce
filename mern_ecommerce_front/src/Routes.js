@@ -1,24 +1,21 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Signup from "./user/Signup";
+import Signin from "./user/Sigin";
+import Home from "./core/Home";
 import Menu from "./core/Menu";
 
-const Routes = () => (
-  <BrowserRouter>
-    <div>
+const Routes = () => {
+  return (
+    <BrowserRouter>
       <Menu />
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/signin" exact component={Signin} />
         <Route path="/signup" exact component={Signup} />
+        <Route path="/signin" exact component={Signin} />
       </Switch>
-    </div>
-    {/* <Menu />
-    <Switch>
-      <Route exact path="/" component={() => <h1>Home</h1>} />
-      <Route path="/signin" component={() => <h1>Sign In</h1>} />
-      <Route path="/signup" component={() => <h1>Sign Up</h1>} />
-    </Switch> */}
-  </BrowserRouter>
-);
+    </BrowserRouter>
+  );
+};
 
 export default Routes;
