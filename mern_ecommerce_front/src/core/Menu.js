@@ -38,4 +38,5 @@ const Menu = ({ history }) => (
     </ul>
   </div>
 );
-exports.Menu = withRouter(Menu);
+
+export default withRouter(Menu);
