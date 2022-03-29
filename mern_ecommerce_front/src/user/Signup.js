@@ -26,6 +26,7 @@ const Signup = () => {
           className="form-control"
           id="name"
           placeholder="Enter name"
+          value={name}
         />
       </div>
       <div className="form-group">
@@ -36,6 +37,7 @@ const Signup = () => {
           className="form-control"
           id="email"
           placeholder="Enter email"
+          value={email}
         />
       </div>
       <div className="form-group">
@@ -46,6 +48,7 @@ const Signup = () => {
           className="form-control"
           id="password"
           placeholder="Password"
+          value={password}
         />
       </div>
       <button
@@ -62,13 +65,25 @@ const Signup = () => {
 
   const clickSubmit = (event) => {
     event.preventDefault(); // prevent the page from refreshing
-    setValues({ ...values, error: false });
-    signup({ name, email, password });
+    signup({ name, email, password }).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error, success: false });
+      } else {
+        setValues({
+          ...values,
+          name: "",
+          email: "",
+          password: "",
+          error: "",
+          success: true,
+        });
+      }
+    });
   };
 
   const signup = (user) => {
     // console.log("name: ", name +"\n"+ "email: ", email +"\n"+  "password: ", password);
-    fetch(`${API}/signup`, {
+    return fetch(`${API}/signup`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -80,9 +95,28 @@ const Signup = () => {
         return response.json();
       })
       .catch((err) => {
-        console.log(err);
+        return err;
       });
   };
+
+  const showError = () => (
+    <div
+      className="alert alert-danger"
+      style={{ display: error ? "" : "none" }}
+    >
+      {error}
+    </div>
+  );
+
+  const showSuccess = () => (
+    <div
+      className="alert alert-info text-center"
+      style={{ display: success ? "" : "none" }}
+    >
+      Your account is created successfull!
+      <br /> Please <a href="/signin">Login</a>
+    </div>
+  );
 
   return (
     <Layout title=" " description=" ">
@@ -93,6 +127,8 @@ const Signup = () => {
               <div className="card-body">
                 <h1 className="text-center pb-4 pt-3">Sign Up</h1>
                 {signUpForm()}
+                {showError()}
+                {showSuccess()}
                 {JSON.stringify(values)} {/* for debugging */}
               </div>
             </div>
