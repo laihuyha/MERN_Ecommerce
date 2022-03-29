@@ -48,11 +48,41 @@ const Signup = () => {
           placeholder="Password"
         />
       </div>
-      <button type="submit" className="btn btn-primary btn-block">
+      <button
+        onClick={clickSubmit}
+        type="submit"
+        className="btn btn-primary btn-block"
+      >
         Submit
       </button>
     </form>
   );
+
+  const { name, email, password, success, error } = values;
+
+  const clickSubmit = (event) => {
+    event.preventDefault(); // prevent the page from refreshing
+    setValues({ ...values, error: false });
+    signup({ name, email, password });
+  };
+
+  const signup = (user) => {
+    // console.log("name: ", name +"\n"+ "email: ", email +"\n"+  "password: ", password);
+    fetch(`${API}/signup`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Layout title=" " description=" ">
