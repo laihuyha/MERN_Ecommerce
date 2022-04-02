@@ -3,6 +3,8 @@ import Layout from "./Layout";
 import Card from "./Card";
 import { getCategories } from "./apiCore";
 import CategoryCheckbox from "./categoryCheckbox";
+import RadioBox from "./pricesRadiobox";
+import { prices } from "./fixedPrices";
 
 const Shop = () => {
   //#region State
@@ -26,11 +28,28 @@ const Shop = () => {
 
   //Send the categories to the CategoryCheckbox component
   //Data sent to the CategoryCheckbox component is the categories array
+  // filter is the id of the category
   const handleFilters = (filters, filterBy) => {
     // console.log("SHOP", filters, filterBy);
     const newFilters = { ...myFilters };
-    newFilters.filters[filterBy] = filters;
+    newFilters.filters[filterBy] = filters; //filters is only the array of ids not include filterBy
+    if (filterBy === "price") {
+      const priceValues = handlePrice(filters);
+      newFilters.filters[filterBy] = priceValues; // newFilters now is an object including the array of id and the array of prices
+    }
     setMyFilters(newFilters);
+  };
+
+  const handlePrice = (value) => {
+    const data = prices;
+    let array = [];
+
+    for (let key in data) {
+      if (data[key].id === parseInt(value)) {
+        array = data[key].array;
+      }
+    }
+    return array;
   };
 
   useEffect(() => {
@@ -51,6 +70,13 @@ const Shop = () => {
                 //mean the same as: handleFilters={(filters) => handleFilters(filters, "category")}
               />
             </ul>
+            <div>
+              <h4 className="mb-4">Price</h4>
+              <RadioBox
+                prices={prices}
+                handleFilters={(filters) => handleFilters(filters, "price")}
+              />
+            </div>
           </div>
           <div className="col-md-8">{JSON.stringify(myFilters)}</div>
         </div>
