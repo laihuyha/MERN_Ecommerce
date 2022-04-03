@@ -18,7 +18,7 @@ const Card = ({ product }) => {
           <a href="/" class="title h3">
             {product.name}
           </a>
-          <p class="desc">Short-Description : {product.description}</p>
+          <p class="desc">Short-Description : {product.description.substring(0,50)}</p>
           <div class="rating-wrap">
             {/* <div class="label-rating">132 reviews</div> */}
             <div class="label-rating">Sold : {product.sold}</div>
@@ -31,7 +31,7 @@ const Card = ({ product }) => {
           <Link to="/" class="btn btn-sm btn-outline-primary me-1 float-right">
             View Info
           </Link>
-          <div class="price-wrap mt-3 h5">
+          <div class="price-wrap mt-3 h6">
             <span class="price-new">
               <span className="text-success">Price : </span>
               {product.price.toLocaleString(navigator.language, {
