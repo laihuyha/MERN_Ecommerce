@@ -5,7 +5,11 @@ import { API } from "../config";
 const ShowImage = ({ item, url }) => {
   return (
     <div class="img-wrap">
-      <img src={`${API}/${url}/photo/${item._id}`} alt={item.name} />
+      <img
+        src={`${API}/${url}/photo/${item._id}`}
+        alt={item.name}
+        class="rounded-4"
+      />
       {/*url = product, item = product*/}
     </div>
   );
