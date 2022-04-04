@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import Layout from "./Layout";
 import { getProducts } from "./apiCore";
 import Card from "./Card";
+import Search from "./Search";
 
 const Home = () => {
   //#region State
@@ -39,6 +40,7 @@ const Home = () => {
   return (
     <Layout title="Home Page" description="Node React">
       <div class="container bg-secondary">
+        <Search />
         <hr />
         <br />
         <p class="text-center display-3">Best Seller</p>
