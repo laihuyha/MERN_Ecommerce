@@ -63,13 +63,13 @@ const Search = () => {
     const searchedProducts = (results = []) => {
         return (
             <div>
-                <h2 className="mt-4 mb-4">
+                <h2 className="mt-4 mb-4" >
                     {searchMessage(searched, results)}
                 </h2>
 
                 <div className="row">
                     {results.map((product, i) => (
-                        <div className="col-4 mb-3">
+                        <div className="col-9 md-3">
                             <Card key={i} product={product} />
                         </div>
                     ))}
@@ -118,6 +118,7 @@ const Search = () => {
             <div className="container mb-3">{searchForm()}</div>
             <div className="container-fluid mb-3">
                 {searchedProducts(results)}
+                {/* {JSON.stringify(data)} */}
             </div>
         </div>
     );
