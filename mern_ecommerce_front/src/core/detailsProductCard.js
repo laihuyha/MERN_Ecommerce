@@ -22,11 +22,7 @@ const CardDetails = ({ product, showViewProductButton = true }) => {
   };
 
   const showAddToCartButton = (showViewProductButton) => {
-    return (
-      <button className="btn btn-sm btn-outline-warning me-1">
-        Add to Cart
-      </button>
-    );
+    return <button className="btn btn-lg btn-warning me-1">Add to Cart</button>;
   };
 
   const showStock = (quantity) => {
@@ -40,7 +36,7 @@ const CardDetails = ({ product, showViewProductButton = true }) => {
     <div class="card" style={{ backgroundColor: "#d3eaf2" }}>
       <div class="container-fliud">
         <div class="wrapper row">
-          <div class="preview col-md-6 mb-4 mt-4 ml-4">
+          <div class="preview col-md-4 mb-4 mt-4 ml-4">
             <div class="preview-pic tab-content">
               <div class="tab-pane active" id="pic-1">
                 <ShowImage item={product} url="product" />

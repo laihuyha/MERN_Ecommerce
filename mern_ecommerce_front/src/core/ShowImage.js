@@ -8,7 +8,8 @@ const ShowImage = ({ item, url }) => {
       <img
         src={`${API}/${url}/photo/${item._id}`}
         alt={item.name}
-        class="rounded-4"
+        class="rounded-3"
+        style={{height: "450px", width: "320px"}}
       />
       {/*url = product, item = product*/}
     </div>
