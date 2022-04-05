@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import "../assets/css/productCustom.css";
 import ShowImage from "./ShowImage";
@@ -15,6 +15,8 @@ const Card = ({
   showAddToCartButton = true,
   cartUpdate = false,
   showRemoveProductButton = false,
+  setRun = (f) => f, // default value of function
+  run = undefined, // default value of undefined
 }) => {
   //#region state
   const [redirect, setRedirect] = useState(false);
@@ -26,7 +28,7 @@ const Card = ({
     return (
       showViewProductButton && (
         <Link to={`/product/${product._id}`} className="mr-2">
-          <button className="btn btn-sm btn-outline-primary me-1 float-right">
+          <button className="btn btn-sm btn-outline-primary me-1">
             View Product
           </button>
         </Link>
@@ -68,6 +70,7 @@ const Card = ({
   };
 
   const handdleChange = (productId) => (event) => {
+    setRun(!run); // run useEffect in parent Cart
     setCount(event.target.value < 1 ? 1 : event.target.value);
     if (event.target.value >= 1) {
       updateItem(productId, event.target.value);
@@ -77,8 +80,8 @@ const Card = ({
   const showCartUpdateOptions = (cartUpdate) => {
     return (
       cartUpdate && (
-        <div>
-          <div className="input-group mb-3">
+        <Fragment>
+          <div className="input-group">
             <input
               type="number"
               className="form-control"
@@ -86,28 +89,20 @@ const Card = ({
               onChange={handdleChange(product._id)}
             />
           </div>
-        </div>
+        </Fragment>
       )
     );
   };
   const showCartRemoveButton = (showRemoveProductButton) => {
     return (
       showRemoveProductButton && (
-        // <button
-        //   onClick={() => {
-        //     removeItem(product._id);
-        //   }}
-        //   className="btn btn-sm btn-outline-danger me-1 float-right"
-        // >
-        //   Remove Product
-        // </button>
-        <div>
+        <Fragment>
           <button
             className="btn btn-outline-danger"
             onClick={() => {
               removeItem(product._id);
+              setRun(!run); // run useEffect in parent Cart
             }}
-            // style={{ height: "30px", width: "30px" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -124,13 +119,13 @@ const Card = ({
               />
             </svg>
           </button>
-        </div>
+        </Fragment>
       )
     );
   };
   //#endregion
   return (
-    <div className="col-md-4">
+    <div className="col-md-6">
       {shouldRedirect(redirect)}
       <figure class="card card-product" style={{ height: "600px" }}>
         {/* <div class="img-wrap">
@@ -165,7 +160,7 @@ const Card = ({
             <div className="col-md-6">
               {showStock(product.quantity)}
               <br></br>
-              <div class="price-wrap mt-3 h6">
+              <div class="price-wrap mt-10 h6">
                 <span class="price-new">
                   <span className="text-success">Price : </span>
                   {product.price.toLocaleString(navigator.language, {
@@ -176,11 +171,19 @@ const Card = ({
                 {/* <del class="price-old">$1980</del> */}
               </div>
             </div>
-            <div className="col-md-6 text-center">
-              {showViewButton(showViewProductButton)}
-              {showAddToCart(showAddToCartButton)}
-              {showCartUpdateOptions(cartUpdate)}
-              {showCartRemoveButton(showRemoveProductButton)}
+            <div className="col-md-6">
+              <div>
+                {showViewButton(showViewProductButton)}
+                {showAddToCart(showAddToCartButton)}
+              </div>
+              <div class="row mt-2">
+                <span className="col-sm-8">
+                  {showCartUpdateOptions(cartUpdate)}
+                </span>
+                <span className="col-sm-4">
+                  {showCartRemoveButton(showRemoveProductButton)}
+                </span>
+              </div>
             </div>
           </div>
         </div>
