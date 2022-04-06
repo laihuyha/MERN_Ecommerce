@@ -1,14 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
-import Layout from "./Layout";
 import { processPayment, getBraintreeClientToken } from "./apiCore";
-import Card from "./Card";
 import { isAuthenticated } from "../auth";
 import { Link } from "react-router-dom";
 import DropIn from "braintree-web-drop-in-react";
+import { emptyCart } from "./cartHelpers";
 
 const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
   //#region State
   const [data, setData] = useState({
+    loading: false,
     success: false,
     clientToken: null,
     error: "",
@@ -76,9 +76,20 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
         processPayment(userId, token, paymentData)
           .then((response) => {
             setData({ ...data, success: response.success });
+            emptyCart(() => {
+              setRun(!run); // run useEffect in parent Cart
+              console.log("Payment Successful");
+              setData({
+                loading: false,
+                success: true,
+              });
+            });
             // console.log(response);
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            console.log(error);
+            setData({ loading: false });
+          });
       })
       .catch((error) => {
         // console.log("error", error);
@@ -146,6 +157,8 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
       Thanks for buying!
     </div>
   );
+  const showLoading = (loading) =>
+    loading && <h2 className="text-danger">Loading...</h2>;
   //#endregion
 
   return (
@@ -167,6 +180,7 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
           USD
         </span>
       </h2>
+      {showLoading(data.loading)}
       {showError(data.error)}
       {showSuccess(data.success)}
       {showCheckout()}

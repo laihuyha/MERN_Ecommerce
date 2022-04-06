@@ -50,11 +50,13 @@ const Product = (props) => {
           )}
         </div>
         <div className="col-sm-3">
-          <h4>Related products</h4>
-          <div className="row">
-            {reatedProduct.map((p, i) => (
-              <CardRelate key={i} product={p} />
-            ))}
+          <div className="container bg-secondary">
+            <h4>Related products</h4>
+            <div className="row">
+              {reatedProduct.map((p, i) => (
+                <CardRelate key={i} product={p} />
+              ))}
+            </div>
           </div>
         </div>
       </div>

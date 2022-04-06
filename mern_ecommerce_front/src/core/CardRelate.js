@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import "../assets/css/productCustom.css";
 import ShowImage from "./ShowImage";
@@ -9,14 +9,14 @@ import { addItem, updateItem, removeItem } from "./cartHelpers";
 // import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
 // import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js";
 
-const CardRelate = ({
+const CardDetails = ({
   product,
   showViewProductButton = true,
   showAddToCartButton = true,
   cartUpdate = false,
   showRemoveProductButton = false,
-  setRun = (f) => f, // default value of function
-  run = undefined, // default value of undefined
+  setRun = (f) => f,
+  run = undefined,
 }) => {
   //#region state
   const [redirect, setRedirect] = useState(false);
@@ -28,7 +28,7 @@ const CardRelate = ({
     return (
       showViewProductButton && (
         <Link to={`/product/${product._id}`} className="mr-2">
-          <button className="btn btn-sm btn-outline-primary me-1">
+          <button className="btn btn-sm btn-outline-primary me-1 float-right">
             View Product
           </button>
         </Link>
@@ -37,9 +37,8 @@ const CardRelate = ({
   };
 
   const addToCart = () => {
-    addItem(product, () => {
-      setRedirect(true);
-    });
+    // console.log('added');
+    addItem(product, setRedirect(true));
   };
 
   const shouldRedirect = (redirect) => {
@@ -53,7 +52,7 @@ const CardRelate = ({
       showAddToCartButton && (
         <button
           onClick={addToCart}
-          className="btn btn-sm btn-outline-warning me-1"
+          className="btn btn-sm btn-outline-warning me-1 float-right"
         >
           Add to Cart
         </button>
@@ -80,8 +79,8 @@ const CardRelate = ({
   const showCartUpdateOptions = (cartUpdate) => {
     return (
       cartUpdate && (
-        <Fragment>
-          <div className="input-group">
+        <div>
+          <div className="input-group mb-3">
             <input
               type="number"
               className="form-control"
@@ -89,20 +88,29 @@ const CardRelate = ({
               onChange={handdleChange(product._id)}
             />
           </div>
-        </Fragment>
+        </div>
       )
     );
   };
   const showCartRemoveButton = (showRemoveProductButton) => {
     return (
       showRemoveProductButton && (
-        <Fragment>
+        // <button
+        //   onClick={() => {
+        //     removeItem(product._id);
+        //   }}
+        //   className="btn btn-sm btn-outline-danger me-1 float-right"
+        // >
+        //   Remove Product
+        // </button>
+        <div>
           <button
             className="btn btn-outline-danger"
             onClick={() => {
               removeItem(product._id);
               setRun(!run); // run useEffect in parent Cart
             }}
+            // style={{ height: "30px", width: "30px" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +127,7 @@ const CardRelate = ({
               />
             </svg>
           </button>
-        </Fragment>
+        </div>
       )
     );
   };
@@ -129,8 +137,8 @@ const CardRelate = ({
       {shouldRedirect(redirect)}
       <figure class="card card-product" style={{ height: "600px" }}>
         {/* <div class="img-wrap">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/5.webp" />
-            </div> */}
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/5.webp" />
+      </div> */}
         <ShowImage item={product} url="product" />
         <figcaption class="info-wrap">
           <a href="/" class="title h3" name>
@@ -191,4 +199,4 @@ const CardRelate = ({
     </div>
   );
 };
-export default CardRelate;
+export default CardDetails;

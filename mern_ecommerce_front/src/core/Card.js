@@ -15,6 +15,8 @@ const Card = ({
   showAddToCartButton = true,
   cartUpdate = false,
   showRemoveProductButton = false,
+  setRun = (f) => f,
+  run = undefined,
 }) => {
   //#region state
   const [redirect, setRedirect] = useState(false);
@@ -35,9 +37,8 @@ const Card = ({
   };
 
   const addToCart = () => {
-    addItem(product, () => {
-      setRedirect(true);
-    });
+    // console.log('added');
+    addItem(product, setRedirect(true));
   };
 
   const shouldRedirect = (redirect) => {
@@ -68,6 +69,7 @@ const Card = ({
   };
 
   const handdleChange = (productId) => (event) => {
+    setRun(!run); // run useEffect in parent Cart
     setCount(event.target.value < 1 ? 1 : event.target.value);
     if (event.target.value >= 1) {
       updateItem(productId, event.target.value);
@@ -106,6 +108,7 @@ const Card = ({
             className="btn btn-outline-danger"
             onClick={() => {
               removeItem(product._id);
+              setRun(!run); // run useEffect in parent Cart
             }}
             // style={{ height: "30px", width: "30px" }}
           >
@@ -131,11 +134,8 @@ const Card = ({
   //#endregion
   return (
     <div className="col-md-4">
-      {shouldRedirect(redirect)}
       <figure class="card card-product" style={{ height: "600px" }}>
-        {/* <div class="img-wrap">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/5.webp" />
-            </div> */}
+        {shouldRedirect(redirect)}
         <ShowImage item={product} url="product" />
         <figcaption class="info-wrap">
           <a href="/" class="title h3" name>

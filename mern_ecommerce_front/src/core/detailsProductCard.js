@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import "../assets/css/productCustom.css";
 import ShowImage from "./ShowImage";
@@ -15,8 +15,8 @@ const CardDetails = ({
   showAddToCartButton = true,
   cartUpdate = false,
   showRemoveProductButton = false,
-  setRun = (f) => f, // default value of function
-  run = undefined, // default value of undefined
+  setRun = (f) => f,
+  run = undefined,
 }) => {
   //#region state
   const [redirect, setRedirect] = useState(false);
@@ -28,7 +28,7 @@ const CardDetails = ({
     return (
       showViewProductButton && (
         <Link to={`/product/${product._id}`} className="mr-2">
-          <button className="btn btn-sm btn-outline-primary me-1">
+          <button className="btn btn-sm btn-outline-primary me-1 float-right">
             View Product
           </button>
         </Link>
@@ -37,9 +37,8 @@ const CardDetails = ({
   };
 
   const addToCart = () => {
-    addItem(product, () => {
-      setRedirect(true);
-    });
+    // console.log('added');
+    addItem(product, setRedirect(true));
   };
 
   const shouldRedirect = (redirect) => {
@@ -80,8 +79,8 @@ const CardDetails = ({
   const showCartUpdateOptions = (cartUpdate) => {
     return (
       cartUpdate && (
-        <Fragment>
-          <div className="input-group">
+        <div>
+          <div className="input-group mb-3">
             <input
               type="number"
               className="form-control"
@@ -89,20 +88,29 @@ const CardDetails = ({
               onChange={handdleChange(product._id)}
             />
           </div>
-        </Fragment>
+        </div>
       )
     );
   };
   const showCartRemoveButton = (showRemoveProductButton) => {
     return (
       showRemoveProductButton && (
-        <Fragment>
+        // <button
+        //   onClick={() => {
+        //     removeItem(product._id);
+        //   }}
+        //   className="btn btn-sm btn-outline-danger me-1 float-right"
+        // >
+        //   Remove Product
+        // </button>
+        <div>
           <button
             className="btn btn-outline-danger"
             onClick={() => {
               removeItem(product._id);
               setRun(!run); // run useEffect in parent Cart
             }}
+            // style={{ height: "30px", width: "30px" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -119,18 +127,15 @@ const CardDetails = ({
               />
             </svg>
           </button>
-        </Fragment>
+        </div>
       )
     );
   };
   //#endregion
   return (
-    <div className="col-md-6">
-      {shouldRedirect(redirect)}
+    <div className="col-md-12">
       <figure class="card card-product" style={{ height: "600px" }}>
-        {/* <div class="img-wrap">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/5.webp" />
-            </div> */}
+        {shouldRedirect(redirect)}
         <ShowImage item={product} url="product" />
         <figcaption class="info-wrap">
           <a href="/" class="title h3" name>
@@ -160,7 +165,7 @@ const CardDetails = ({
             <div className="col-md-6">
               {showStock(product.quantity)}
               <br></br>
-              <div class="price-wrap mt-10 h6">
+              <div class="price-wrap mt-3 h6">
                 <span class="price-new">
                   <span className="text-success">Price : </span>
                   {product.price.toLocaleString(navigator.language, {
@@ -171,19 +176,11 @@ const CardDetails = ({
                 {/* <del class="price-old">$1980</del> */}
               </div>
             </div>
-            <div className="col-md-6">
-              <div>
-                {showViewButton(showViewProductButton)}
-                {showAddToCart(showAddToCartButton)}
-              </div>
-              <div class="row mt-2">
-                <span className="col-sm-8">
-                  {showCartUpdateOptions(cartUpdate)}
-                </span>
-                <span className="col-sm-4">
-                  {showCartRemoveButton(showRemoveProductButton)}
-                </span>
-              </div>
+            <div className="col-md-6 text-center">
+              {showViewButton(showViewProductButton)}
+              {showAddToCart(showAddToCartButton)}
+              {showCartUpdateOptions(cartUpdate)}
+              {showCartRemoveButton(showRemoveProductButton)}
             </div>
           </div>
         </div>

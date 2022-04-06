@@ -37,9 +37,8 @@ const Card = ({
   };
 
   const addToCart = () => {
-    addItem(product, () => {
-      setRedirect(true);
-    });
+    // console.log('added');
+    addItem(product, setRedirect(true));
   };
 
   const shouldRedirect = (redirect) => {
@@ -126,11 +125,11 @@ const Card = ({
   //#endregion
   return (
     <div className="col-md-6">
-      {shouldRedirect(redirect)}
       <figure class="card card-product" style={{ height: "600px" }}>
         {/* <div class="img-wrap">
               <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/5.webp" />
             </div> */}
+        {shouldRedirect(redirect)}
         <ShowImage item={product} url="product" />
         <figcaption class="info-wrap">
           <a href="/" class="title h3" name>
