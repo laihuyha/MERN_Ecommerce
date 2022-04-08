@@ -9,7 +9,7 @@ import { addItem, updateItem, removeItem } from "./cartHelpers";
 // import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
 // import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js";
 
-const Card = ({
+const CardCart = ({
   product,
   showViewProductButton = true,
   showAddToCartButton = true,
@@ -190,4 +190,4 @@ const Card = ({
     </div>
   );
 };
-export default Card;
+export default CardCart;

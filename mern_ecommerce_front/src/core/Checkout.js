@@ -17,7 +17,7 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
     success: false,
     clientToken: null,
     error: "",
-    instance: {}, // Braintree instance for DropIn to use to create payment method //instance includes the payment method nonce
+    instance: {},
     address: "",
   });
   //#endregion
@@ -32,8 +32,10 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
   const getToken = (userId, token) => {
     getBraintreeClientToken(userId, token).then((data) => {
       if (data.error) {
+        console.log(data.error);
         setData({ ...data, error: data.error });
       } else {
+        console.log(data);
         setData({ clientToken: data.clientToken });
       }
     });
@@ -45,7 +47,7 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
           <div className="gorm-group mb-3">
             <label className="text-muted">Address</label>
             <textarea
-              // onChange={handleChange("address")}
+              onChange={handleAddress}
               className="form-control"
               value={data.address}
               placeholder="Type your address here..."
@@ -67,33 +69,50 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
       ) : null}
     </div>
   );
+
+  let deliveryAddress = data.address;
+
   const buy = () => {
     setData({ loading: true });
-    //send requestPayment to braintree (data.instance.requestPaymentMehtod())
     let nonce;
     let getNonce = data.instance
       .requestPaymentMethod()
       .then((data) => {
-        // console.log("data", data);
+        // console.log(data);
         nonce = data.nonce;
-        // console.log("What's sent?", nonce, getTotalUSD(products)); //send nonce and total to backend
         const paymentData = {
           paymentMethodNonce: nonce,
-          // amount: getTotal(products),
-          amount: getTotalUSD(products),
+          amount: (getTotal(products) / 23000).toFixed(2),
         };
+
         processPayment(userId, token, paymentData)
           .then((response) => {
-            setData({ ...data, success: response.success });
-            emptyCart(() => {
-              setRun(!run); // run useEffect in parent Cart
-              console.log("Payment Successful");
-              setData({
-                loading: false,
-                success: true,
+            console.log(response);
+            // empty cart
+            // create order
+
+            const createOrderData = {
+              products: products,
+              transaction_id: response.transaction.id,
+              amount: response.transaction.amount,
+              address: deliveryAddress,
+            };
+
+            createOrder(userId, token, createOrderData)
+              .then((response) => {
+                emptyCart(() => {
+                  setRun(!run); // run useEffect in parent Cart
+                  console.log("Payment Successfull !!, Emptying cart");
+                  setData({
+                    loading: false,
+                    success: true,
+                  });
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                setData({ loading: false });
               });
-            });
-            // console.log(response);
           })
           .catch((error) => {
             console.log(error);
@@ -101,7 +120,7 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
           });
       })
       .catch((error) => {
-        // console.log("error", error);
+        // console.log("dropin error: ", error);
         setData({ ...data, error: error.message });
       });
   };
@@ -115,23 +134,6 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
   const getTotal = () => {
     return products.reduce((currentValue, nextValue) => {
       return currentValue + nextValue.count * nextValue.price;
-    }, 0);
-  };
-  // const getTotalUSD = () => {
-  //   return products.reduce((currentValue, nextValue) => {
-  //     return parseFloat(
-  //       (currentValue + nextValue.count * nextValue.price) / 23000
-  //     ).toFixed(2);
-  //   }, 0);
-  // };
-
-  const getTotalUSD = () => {
-    return products.reduce((currentValue, nextValue) => {
-      const exchangeRate = Number(23000);
-      const price = Number(
-        (currentValue + nextValue.count * nextValue.price) / exchangeRate
-      ).toFixed(2);
-      return price;
     }, 0);
   };
   const showCheckout = () => {
@@ -168,6 +170,10 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
   );
   const showLoading = (loading) =>
     loading && <h2 className="text-danger">Loading...</h2>;
+
+  const handleAddress = (event) => {
+    setData({ ...data, address: event.target.value });
+  };
   //#endregion
 
   return (
@@ -183,7 +189,7 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
         <span style={{ color: "Highlight" }}> {decodedString}</span>
         <span className="text-success">
           {" "}
-          {getTotalUSD().toLocaleString(navigator.language, {
+          {(getTotal() / 23000).toLocaleString(navigator.language, {
             minimumFractionDigits: 2,
           })}{" "}
           USD
