@@ -1,5 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { processPayment, getBraintreeClientToken } from "./apiCore";
+import {
+  getProducts,
+  processPayment,
+  getBraintreeClientToken,
+  createOrder,
+} from "./apiCore";
 import { isAuthenticated } from "../auth";
 import { Link } from "react-router-dom";
 import DropIn from "braintree-web-drop-in-react";
