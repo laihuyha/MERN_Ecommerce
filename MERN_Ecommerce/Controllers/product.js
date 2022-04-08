@@ -101,6 +101,7 @@ exports.update = (req, res) => {
         let product = req.product;
         product = _.extend(product, fields);
 
+        
         // 1kb = 1000
         // 1mb = 1000000
 
