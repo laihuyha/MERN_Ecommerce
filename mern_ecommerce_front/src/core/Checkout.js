@@ -49,6 +49,9 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
           <DropIn
             options={{
               authorization: data.clientToken,
+              paypal: {
+                flow: "vault",
+              },
             }}
             onInstance={(instance) => (data.instance = instance)}
           />
@@ -60,6 +63,7 @@ const Checkout = ({ products, setRun = (f) => f, run = undefined }) => {
     </div>
   );
   const buy = () => {
+    setData({ loading: true });
     //send requestPayment to braintree (data.instance.requestPaymentMehtod())
     let nonce;
     let getNonce = data.instance
