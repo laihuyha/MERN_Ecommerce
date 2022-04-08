@@ -4,6 +4,7 @@ import "../assets/css/productCustom.css";
 import ShowImage from "./ShowImage";
 import moment from "moment";
 import { addItem, updateItem, removeItem } from "./cartHelpers";
+import Cart from "./Cart";
 
 // import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css";
 // import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
@@ -85,6 +86,7 @@ const CardCart = ({
               type="number"
               className="form-control"
               value={count}
+              max={product.quantity}
               onChange={handdleChange(product._id)}
             />
           </div>
