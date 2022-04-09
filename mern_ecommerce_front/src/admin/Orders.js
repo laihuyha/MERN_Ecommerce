@@ -2,18 +2,19 @@ import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../core/Layout";
 import { isAuthenticated } from "../auth";
 import { Link } from "react-router-dom";
-import { listOrders } from "./API";
+import { getStatusValues, listOrders, updateOrderStatus } from "./API";
 import ShowSmImage from "../core/ShowSmImage";
 import moment from "moment";
-import thumbDefault from "../assets/media/svg/files/blank-image.svg";
 import "../assets/plugins/custom/datatables/datatables.bundle.css";
 import "../assets/plugins/global/plugins.bundle.css";
 import "../assets/css/style.bundle.css";
+import { findByDisplayValue } from "@testing-library/react";
 
 const Orders = () => {
   //#region state
   const [orders, setOrders] = useState([]);
   const { user, token } = isAuthenticated();
+  const [statusValues, setStatusValues] = useState([]);
   //#endregion
 
   //#region useEffect and function
@@ -24,6 +25,18 @@ const Orders = () => {
           console.log(data.error);
         } else {
           setOrders(data);
+        }
+      })
+      .catch((err) => {});
+  };
+
+  const loadStatusValues = () => {
+    getStatusValues(user._id, token)
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          setStatusValues(data);
         }
       })
       .catch((err) => {});
@@ -48,7 +61,7 @@ const Orders = () => {
     ) : null;
   };
 
-  const showStatus = (status) => {
+  const showStatuscolor = (status) => {
     if (status === "Not processed") {
       return (
         <Fragment>
@@ -93,6 +106,38 @@ const Orders = () => {
     </div>
   );
 
+  const showStatus = (o) => (
+    <div className="form-group">
+      <h3 className="mark mb-4">Status: {showStatuscolor(o.status)}</h3>
+      <select
+        className="form-control"
+        style={{ height: "40px" }}
+        onChange={(e) => handleStatusChange(e, o._id)}
+      >
+        <option>Update Status</option>
+        {statusValues.map((status, index) => (
+          <option key={index} value={status}>
+            {status}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
+  const handleStatusChange = (e, orderId) => {
+    // updateOrderStatus(id, e.target.value, user._id, token);
+    // console.log("updateOrderStatus");
+    updateOrderStatus(user._id, token, orderId, e.target.value)
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          loadOrders();
+        }
+      })
+      .catch((err) => {});
+  };
+
   const showOrders = () => {
     if (orders.length > 0) {
       return orders.map((o, index) => {
@@ -102,7 +147,7 @@ const Orders = () => {
             style={{ border: "0.1px solid green" }}
             key={index}
           >
-            <div className="card-header mt-5">
+            <div className="card-header mt-2 mb-2">
               <div className="col-md-5">
                 <h4>
                   Order ID: <span className="text-success">{o._id}</span>
@@ -116,7 +161,8 @@ const Orders = () => {
                 <h4>Create Time: {moment(o.createdAt).fromNow()}</h4>
               </div>
               <div className="col-md-3">
-                <h4 className="float-right">Status: {showStatus(o.status)}</h4>
+                {/* <h4 className="float-right">Status: {showStatus(o.status)}</h4> */}
+                {showStatus(o)}
               </div>
             </div>
             <div className="card-body">
@@ -149,7 +195,7 @@ const Orders = () => {
                   style={{ border: "2px solid indigo" }}
                   key={index}
                 >
-                  {console.log(p)}
+                  {/* {console.log(p)} */}
                   {showInput("Product Id", p._id)}
                   {showInput("Product name", p.name)}
                   {showInput("Product price", p.price)}
@@ -162,8 +208,8 @@ const Orders = () => {
       });
     }
   };
-
   useEffect(() => {
+    loadStatusValues();
     loadOrders();
   }, []);
   //#endregion
