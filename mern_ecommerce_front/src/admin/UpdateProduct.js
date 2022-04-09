@@ -1,14 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../core/Layout";
 import { isAuthenticated } from "../auth";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getProduct, getCategories, updateProduct } from "./API";
 import thumbDefault from "../assets/media/svg/files/blank-image.svg";
 import "../assets/plugins/custom/datatables/datatables.bundle.css";
 import "../assets/plugins/global/plugins.bundle.css";
 import "../assets/css/style.bundle.css";
 
-const UpdateProduct = ({match}) => {
+const UpdateProduct = ({ match }) => {
   //#region State
   const [values, setValues] = useState({
     name: "",
@@ -25,33 +25,10 @@ const UpdateProduct = ({match}) => {
     redirectToProfile: false,
     formData: "",
   });
-
-  const init = productId => {
-    getProduct(productId).then(data => {
-        if (data.error) {
-            setValues({ ...values, error: data.error });
-        } else {
-            // populate the state
-            setValues({
-                ...values,
-                name: data.name,
-                description: data.description,
-                price: data.price,
-                category: data.category._id,
-                shipping: data.shipping,
-                quantity: data.quantity,
-                formData: new FormData()
-            });
-            
-            loadCategories();
-        }
-    });
-};
   //#endregion
   //#region useEffect
   useEffect(() => {
-   
-    init(match.params.productId);
+    load(match.params.productId);
   }, []);
   //#endregion
   //#region Event Handlers Functions
@@ -65,24 +42,24 @@ const UpdateProduct = ({match}) => {
     event.preventDefault();
     setValues({ ...values, error: "", loading: true });
 
-    updateProduct(match.params.productId, user._id, token, formData).then((data) => {
-      if (data.error) {
-        setValues({ ...values, error: data.error });
-      } else {
-        setValues({
-          ...values,
-          name: "",
-          description: "",
-          photo: "",
-          price: "",
-          quantity: "",
-          loading: false,
-          error: false,
-          redirectToProfile: true,
-          createdProduct: data.name,
-        });
+    updateProduct(match.params.productId, user._id, token, formData).then(
+      (data) => {
+        if (data.error) {
+          setValues({ ...values, error: data.error });
+        } else {
+          setValues({
+            ...values,
+            name: "",
+            description: "",
+            photo: "",
+            price: "",
+            quantity: "",
+            loading: false,
+            createdProduct: data.name,
+          });
+        }
       }
-    });
+    );
   };
 
   const showError = () => (
@@ -99,7 +76,7 @@ const UpdateProduct = ({match}) => {
       className="alert alert-info"
       style={{ display: createdProduct ? "" : "none" }}
     >
-      <h2 className="text-center">{`${createdProduct}`} is update!</h2>
+      <h2 className="text-center">{`${createdProduct}`} is updated !</h2>
     </div>
   );
 
@@ -109,14 +86,6 @@ const UpdateProduct = ({match}) => {
         <h2>Loading...</h2>
       </div>
     );
-
-    const redirectUser = () => {
-        if(redirectToProfile){
-            if(!error){
-                return <Redirect to="/" />;
-            }
-        }
-    }
 
   // const imageChange = (e) => {
   //   if (e.target.files && e.target.files.length > 0) {
@@ -134,6 +103,26 @@ const UpdateProduct = ({match}) => {
   };
 
   //load categories and set form data
+  const load = (productId) => {
+    getProduct(productId).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setValues({
+          ...values,
+          name: data.name,
+          description: data.description,
+          price: data.price,
+          category: data.category._id,
+          shipping: data.shipping,
+          quantity: data.quantity,
+          formData: new FormData(),
+        });
+        loadCategories();
+      }
+    });
+  };
+
   const loadCategories = () => {
     getCategories().then((data) => {
       if (data.error) {
@@ -205,52 +194,6 @@ const UpdateProduct = ({match}) => {
       </Fragment>
     );
   };
-
-  // //does'nt need anymore
-  // const shippingPartial = () => {
-  //   return (
-  //     <Fragment>
-  //       <div
-  //         className="card card-flush py-4"
-  //         data-select2-id="select2-data-140-miby"
-  //       >
-  //         <div className="card-header">
-  //           <div className="card-title">
-  //             <h2>Shipping</h2>
-  //           </div>
-  //           <div className="card-toolbar">
-  //             <div
-  //               className="rounded-circle bg-success w-15px h-15px"
-  //               id="kt_ecommerce_add_product_status"
-  //             ></div>
-  //           </div>
-  //         </div>
-  //         <div
-  //           className="card-body pt-0"
-  //           data-select2-id="select2-data-139-e7tr"
-  //         >
-  //           <div class="input-group input-group-solid flex-nowrap">
-  //             <span class="input-group-text">
-  //               <i class="fonticon-settings"></i>
-  //             </span>
-  //             <div class="overflow-hidden flex-grow-1">
-  //               <select
-  //                 class="form-select form-select-solid rounded-start-0 border-start"
-  //                 data-control="select2"
-  //                 data-placeholder="Select an option"
-  //               >
-  //                 <option>Choose Below</option>
-  //                 <option value="0">No</option>
-  //                 <option value="1">Yes</option>
-  //               </select>
-  //             </div>
-  //           </div>
-  //           <div className="text-muted fs-7">Set the product shipping.</div>
-  //         </div>
-  //       </div>
-  //     </Fragment>
-  //   );
-  // };
 
   const categoryPartial = () => {
     return (
@@ -504,14 +447,14 @@ const UpdateProduct = ({match}) => {
     description,
     price,
     categories,
-    
+    category,
     shipping,
     quantity,
     loading,
     error,
     createdProduct,
     redirectToProfile,
-    formData
+    formData,
   } = values;
   const { user, token } = isAuthenticated();
   //#endregion
@@ -573,7 +516,7 @@ const UpdateProduct = ({match}) => {
             id="kt_ecommerce_add_product_submit"
             className="btn btn-primary"
           >
-            <span className="indicator-label">Save Changes</span>
+            <span className="indicator-label">Update</span>
             <span className="indicator-progress">
               Please wait...
               <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -602,7 +545,6 @@ const UpdateProduct = ({match}) => {
         {showSuccess()}
         {showError()}
         {newProductForm()}
-        {redirectUser()}
       </div>
     </Layout>
   );
