@@ -101,6 +101,7 @@ exports.update = (req, res) => {
         let product = req.product;
         product = _.extend(product, fields);
 
+        
         // 1kb = 1000
         // 1mb = 1000000
 
@@ -285,11 +286,14 @@ exports.listSearch = (req, res) => {
 };
 
 exports.decreaseQuantity = (req, res, next) => {
+    // map products with the same id to the same product to update the quantity and sold
     let bulkOps = req.body.order.products.map(item => {
         return {
             updateOne: {
                 filter: { _id: item._id },
-                update: { $inc: { quantity: -item.count, sold: +item.count } }
+                update: { $inc: { quantity: -item.count, sold: +item.count } } // $inc means include
+                // item.count is the number of the product that the user want to buy and -item.count is the number of the product that the user bought
+                // sold is the number of the product that the user bought
             }
         };
     });

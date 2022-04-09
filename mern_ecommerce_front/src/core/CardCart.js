@@ -4,12 +4,13 @@ import "../assets/css/productCustom.css";
 import ShowImage from "./ShowImage";
 import moment from "moment";
 import { addItem, updateItem, removeItem } from "./cartHelpers";
+import Cart from "./Cart";
 
 // import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css";
 // import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
 // import "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js";
 
-const Card = ({
+const CardCart = ({
   product,
   showViewProductButton = true,
   showAddToCartButton = true,
@@ -85,6 +86,7 @@ const Card = ({
               type="number"
               className="form-control"
               value={count}
+              max={product.quantity}
               onChange={handdleChange(product._id)}
             />
           </div>
@@ -190,4 +192,4 @@ const Card = ({
     </div>
   );
 };
-export default Card;
+export default CardCart;

@@ -74,17 +74,19 @@ const Dashboard = () => {
                                     <hr />
                                     {h.products.map((p, i) => {
                                         return (
-                                            <div key={i}>
-                                                <h6>Product name: {p.name}</h6>
-                                                <h6>
-                                                    Product price: ${p.price}
-                                                </h6>
-                                                <h6>
-                                                    Purchased date:{" "}
-                                                    {moment(
-                                                        p.createdAt
-                                                    ).fromNow()}
-                                                </h6>
+                                            <div className="mt-2 mb-2 rounded-3" style={{ border: "1px solid grey" }} key={i}>
+                                                <div className="container mb-1 mt-1" >
+                                                    <h6>Product name: {p.name}</h6>
+                                                    <h6>
+                                                        Product price: ${p.price}
+                                                    </h6>
+                                                    <h6>
+                                                        Create date:{" "}
+                                                        {moment(
+                                                            p.createdAt
+                                                        ).fromNow()}
+                                                    </h6>
+                                                </div>
                                             </div>
                                         );
                                     })}
