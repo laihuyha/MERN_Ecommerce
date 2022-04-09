@@ -1,4 +1,3 @@
-
 import { API } from "../config";
 
 export const read = (userId, token) => {

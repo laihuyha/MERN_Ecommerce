@@ -1,3 +1,4 @@
+const { property } = require("lodash");
 const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
@@ -10,4 +11,4 @@ const categorySchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model("Category", categorySchema);
+module.exports = mongoose.model("Category", categorySchema); 

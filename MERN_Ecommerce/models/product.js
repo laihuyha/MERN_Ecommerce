@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema;
+const { ObjectId } = mongoose.Schema; // ObjectId can be Category, User, Product, etc.
 
 const productSchema = new mongoose.Schema(
     {

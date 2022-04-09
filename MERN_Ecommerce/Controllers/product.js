@@ -26,7 +26,7 @@ exports.read = (req, res) => {
 
 exports.create = (req, res) => {
     let form = new formidable.IncomingForm();
-    form.keepExtensions = true;
+    form.keepExtensions = true; //means keep the file extension in the file name when uploading
     form.parse(req, (err, fields, files) => {
         if (err) {
             return res.status(400).json({
@@ -139,7 +139,7 @@ exports.update = (req, res) => {
 exports.list = (req, res) => {
     let order = req.query.order ? req.query.order : 'asc';
     let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
-    let limit = req.query.limit ? parseInt(req.query.limit) : 9;
+    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
 
     Product.find()
         .select('-photo') // exclude photo from the response
@@ -209,7 +209,7 @@ exports.listBySearch = (req, res) => {
     //#region this is for PostMan request body test PASSED
     let order = req.query.order ? req.query.order : 'desc';
     let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
-    let limit = req.query.limit ? parseInt(req.query.limit) : 100;
+    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
     let skip = parseInt(req.body.skip); // this is for pagination (skip is for pagination)
     let findArgs = {};
     //#endregion

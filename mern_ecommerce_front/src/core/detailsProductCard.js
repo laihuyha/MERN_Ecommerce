@@ -43,7 +43,9 @@ const CardDetails = ({
 
   const shouldRedirect = (redirect) => {
     if (redirect) {
-      return <Redirect to="/cart" />;
+      if (window.location.href) {
+        return <Redirect to={window.location.pathname} />;
+      }
     }
   };
 

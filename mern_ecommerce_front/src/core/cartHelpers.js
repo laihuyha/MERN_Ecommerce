@@ -44,7 +44,12 @@ export const updateItem = (productId, count) => {
 
     cart.map((product, i) => {
       if (product._id === productId) {
-        cart[i].count = count;
+        if (count > product.quantity) {
+          alert("Not enough stock");
+          cart[i].count = product.quantity;
+        } else {
+          cart[i].count = count;
+        }
       }
     });
 
