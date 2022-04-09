@@ -110,7 +110,7 @@ const Card = ({
               removeItem(product._id);
               setRun(!run); // run useEffect in parent Cart
             }}
-            // style={{ height: "30px", width: "30px" }}
+          // style={{ height: "30px", width: "30px" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

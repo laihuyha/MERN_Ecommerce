@@ -84,7 +84,7 @@ const Search = () => {
                 <div className="input-group input-group-lg">
                     <div className="input-group-prepend">
                         <select
-                            className="btn mr-2"
+                            className="btn btn-info dropdown-toggle" style={{ height: "50px" }}
                             onChange={handleChange("category")}
                         >
                             <option value="All">All</option>
@@ -107,7 +107,7 @@ const Search = () => {
                     className="btn input-group-append"
                     style={{ border: "none" }}
                 >
-                    <button className="input-group-text">Search</button>
+                    <button className="btn btn-outline-primary" style={{ height: "50px", border: "radius" }}>Search</button>
                 </div>
             </span>
         </form>
