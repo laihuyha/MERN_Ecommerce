@@ -2,7 +2,7 @@ import React from "react";
 import { API } from "../config";
 
 //item = {product} and url means the url of the image
-const ShowImage = ({ item, url }) => {
+const ShowImage = ({ item, url }) => { //product
   return (
     <div class="img-wrap">
       <img

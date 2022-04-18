@@ -1,7 +1,7 @@
 import { API } from "../config";
 import queryString from "query-string";
 
-export const getProducts = (sortBy, order, limit) => {
+export const getProducts = (sortBy, order, limit) => { //localhost:3000/api/products?
   return fetch(`${API}/products?sortBy=${sortBy}&order=desc&limit=9`, {
     method: "GET",
   })

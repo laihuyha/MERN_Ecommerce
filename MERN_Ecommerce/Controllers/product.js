@@ -257,7 +257,7 @@ exports.listBySearch = (req, res) => {
 exports.photo = (req, res, next) => {
     if (req.product.photo.data) {
         res.set('Content-Type', req.product.photo.contentType); //set the content type of the response
-        return res.send(req.product.photo.data); //send the photo data to the response
+        return res.send(req.product.photo.data); //send the photo data to the response binary
     }
     next();
 };
